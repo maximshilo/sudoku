@@ -2,9 +2,9 @@ input {
   text-align: center;
   width: 32px;
   height: 32px;
-  margin: 1px;
   font-weight: bold;
-
+  border-radius: 0px;
+  border: 0.5px solid gray;
 }
 
 .App {
@@ -13,7 +13,6 @@ input {
   align-items: center;
   justify-content: center;
 
-  width: 100vw;
   min-height: 100vh;
   background-color: azure;
 }
@@ -27,23 +26,26 @@ input {
 
 .row {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .col {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .vertical {
-  width: 1px;
-  height: 10px;
+  width: 2px;
+  height: calc(100% + 0px);
   background: black;
-  margin: 1px;
 }
 
 .horizontal {
-  height: 1px;
-  width: 100px;
+  height: 2px;
+  width: calc(100% + 0px);
   background: black;
-  margin: 1px;
 }

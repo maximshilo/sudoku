@@ -14,39 +14,76 @@ const grids = [
     [4, 7, 0, 0, 9, 1, 0, 2, 0],
     [0, 0, 0, 0, 2, 0, 0, 0, 0]
   ],
+  [
+    [3, 0, 5, 4, 0, 0, 3, 0, 2],
+    [7, 3, 4, 0, 6, 0, 0, 5, 8],
+    [0, 1, 0, 5, 3, 0, 0, 0, 0],
+    [0, 4, 2, 6, 0, 7, 1, 9, 5],
+    [0, 9, 7, 0, 0, 4, 0, 6, 0],
+    [0, 0, 0, 0, 1, 3, 0, 0, 7],
+    [9, 0, 6, 3, 0, 5, 0, 0, 0],
+    [4, 7, 0, 0, 9, 1, 0, 2, 0],
+    [0, 0, 0, 0, 2, 0, 0, 0, 0]
+  ]
 ]
 
 function App() {
-  const [grid, setGrid] = useState([
-    0, 1, 2, 3, 4, 5, 6, 7, 8,
-    9, 10, 11, 12, 13, 14, 15, 16, 17,
-    18, 19, 20, 21, 22, 23, 24, 25, 26,
-    27, 28, 29, 30, 31, 32, 33, 34, 35,
-    36, 37, 38, 39, 40, 41, 42, 43, 44,
-    45, 46, 47, 48, 49, 50, 51, 52, 53,
-    54, 55, 56, 57, 58, 59, 60, 61, 62, 
-    63, 64, 65, 66, 67, 68, 69, 70, 71,
-    72, 73, 74, 75, 76, 77, 78, 79, 80, 
-  ])
+  const [currentGridIndex, setCurrentGridIndex] = useState(0)
+  const [grid, setGrid] = useState(grids[currentGridIndex])
+
+  useEffect(() => { loadGrid() }, [])
 
   function loadGrid() {
     let numOfGrids = grids.length
     let nextGridIdx = parseInt(Math.random() * numOfGrids)
-    setGrid(grids[nextGridIdx])
+    setCurrentGridIndex(nextGridIdx)
+    setGrid([...grids[nextGridIdx].map(row => [...row])])
   }
 
   function displayGrid() {
     return (
       <div className='col'>
         {
-          grid.map((square, idx) => {
-            let horizontal = idx % 27 == 0
-            let vertical = idx % 9 == 0 && !horizontal
+          grids[0].map((row, rowIndex) => {
             return (
-              <div className={horizontal ? 'col' : 'row'}>
-              {horizontal ? <div className='horizontal'></div> : <></>}
-              <input type='text'></input>
-              {vertical ? <div className='vertical'></div> : <></>}
+              <div className='col'>
+                {rowIndex % 3 == 0 ? <div className='horizontal'></div> : <></>}
+                <div className='row'>
+                  {row.map((square, squareIndex) => {
+                    let inputValue = grid[rowIndex][squareIndex]
+                    let isDisabled = false
+
+                    if (inputValue == grids[currentGridIndex][rowIndex][squareIndex] && inputValue != 0) {
+                      isDisabled = true
+                    } else if (inputValue == 0) {
+                      inputValue = ''
+                    }
+
+                    let inputStyle = {
+
+                    }
+                    return (
+                      <div className='row'>
+                        {squareIndex % 3 == 0 ? <div className='vertical'></div> : <></>}
+
+                        <input
+                          style={inputStyle}
+                          value={inputValue}
+                          disabled={isDisabled}
+                          onChange={(e) => {
+                            grid[rowIndex][squareIndex] = e.target.value
+                            setGrid([...grid])
+                            checkWinningCondition()
+                          }}
+                        >
+                        </input>
+
+                        {squareIndex + 1 == row.length ? <div className='vertical'></div> : <></>}
+                      </div>
+                    )
+                  })}
+                </div>
+                {rowIndex + 1 == grids[0].length ? <div className='horizontal'></div> : <></>}
               </div>
             )
           })
@@ -55,13 +92,33 @@ function App() {
     )
   }
 
-  function checkWinningCondition() { }
+  function checkWinningCondition() {
+    let range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    let rowsFlag = false
+    let housesFlag = false
 
-  // useEffect(() => { loadGrid() }, [])
+    let rows = grid.map(row => row.toSorted())
+    // let houses = [[], [], [], [], [], [], [], [], []]\
+    let houses = [...grid.map(row => [...row])]
+    houses = houses.flat()
+    
+    let tempHouses = [[], [], [], [], [], [], [], [], []]
+    let tempHousesIndexModifier = -1
+
+    houses.forEach((number, index) => {
+      if (index % 18 == 0) tempHousesIndexModifier ++
+      tempHouses[tempHousesIndexModifier + Math.floor((index % 9) / 3)].push(number)
+    })
+
+    console.log(tempHouses)
+    
+  }
+
 
   return (
     <div className="App">
-      { displayGrid() }
+      <button onClick={() => { loadGrid() }}>NEW GAME</button>
+      {displayGrid()}
     </div>
   );
 }
