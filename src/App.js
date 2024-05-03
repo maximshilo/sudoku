@@ -62,7 +62,7 @@ function App() {
                           onChange={(e) => {
                             grid[rowIndex][squareIndex] = parseInt(e.target.value)
                             setGrid([...grid])
-                            checkWinningCondition()
+                            if (checkWinningCondition()) win()
                           }}
                         >
                         </input>
@@ -82,15 +82,29 @@ function App() {
   }
 
   function checkWinningCondition() {
-    let range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    let rows = grid.map(row => row.toSorted()) // every row
 
-    let rows = grid.map(row => row.toSorted())
-    let houses = [...grid.map(row => [...row])]
-    houses = houses.flat()
-    
-    let tempHouses = [[], [], [], [], [], [], [], [], []]
-    let tempHousesLevelModifier = 0
-    let temphousesSegmentModifier = 0
+    // houses is every 3x3 square
+    // first i map and flat the current grid
+    // then i push every number into it's corresponding house
+    // the final houses list is tempHouses
+
+    let houses = [...grid.map(row => [...row])] // map
+    houses = houses.flat() // flat
+
+    let tempHouses = [[], [], [], [], [], [], [], [], []] // prepare the final lists
+    let tempHousesLevelModifier = 0 // level is the 'vertical' adjustment
+    let temphousesSegmentModifier = 0 // segment is the 'horizontal' adjustment
+
+    // the board is divided as follows 
+    //
+    //  --- --- ---
+    // |0+0|0+1|0+2|
+    //  --- --- --- 
+    // |3+0|3+1|3+2|
+    //  --- --- ---
+    // |6+0|6+1|6+2|
+    //  --- --- ---
 
     houses.forEach((number, index) => {
       if (index % 27 == 0 && index != 0) tempHousesLevelModifier += 3
@@ -105,32 +119,35 @@ function App() {
 
     tempHouses.forEach((house, idx) => {
       house.sort()
-      house.length = 9
-      console.log(`house #${idx} -> ${house}`)
+      house.length = 9 // set the length of the array as to not encounter an index out of range error
     })
 
-    let allEntries = [...rows.concat(tempHouses)]
+    let allEntries = [...rows.concat(tempHouses)] // finally concat the rows and the houses
     let flag = false
 
     allEntries.forEach(entry => {
       flag = false
       if (!flag && entry[0] == 1 && entry[8] == 9) {
-        if (entry.reduce((a,b) => a + b) != 45) flag = true
+        if (entry.reduce((a, b) => a + b) != 45) flag = true
       } else {
         flag = true
       }
-      console.log(`${entry} : ${flag} : ${entry[0] == 1 && entry[8] == 9} : ${entry.reduce((a,b) => a + b)}`)
     })
 
-    console.log(!flag)
     return !flag
   }
 
+  function win() {
+    alert('You WON! Congratulations!')
+    loadGrid()
+  }
 
   return (
     <div className="App">
-      <button onClick={() => { loadGrid() }}>NEW GAME</button>
-      {displayGrid()}
+      <div className='gameContainer'>
+        <button className='newGameButton' onClick={() => { loadGrid() }}>NEW GAME</button>
+        { displayGrid() }
+      </div>
     </div>
   );
 }
