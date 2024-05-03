@@ -145,8 +145,8 @@ function App() {
   return (
     <div className="App">
       <div className='gameContainer'>
-        <button className='newGameButton' onClick={() => { loadGrid() }}>NEW GAME</button>
         { displayGrid() }
+        <button className='newGameButton' onClick={() => { loadGrid() }}>NEW GAME</button>
       </div>
     </div>
   );
