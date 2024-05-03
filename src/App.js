@@ -13,17 +13,6 @@ const grids = [
     [9, 0, 6, 3, 0, 5, 0, 0, 0],
     [4, 7, 0, 0, 9, 1, 0, 2, 0],
     [0, 0, 0, 0, 2, 0, 0, 0, 0]
-  ],
-  [
-    [3, 0, 5, 4, 0, 0, 3, 0, 2],
-    [7, 3, 4, 0, 6, 0, 0, 5, 8],
-    [0, 1, 0, 5, 3, 0, 0, 0, 0],
-    [0, 4, 2, 6, 0, 7, 1, 9, 5],
-    [0, 9, 7, 0, 0, 4, 0, 6, 0],
-    [0, 0, 0, 0, 1, 3, 0, 0, 7],
-    [9, 0, 6, 3, 0, 5, 0, 0, 0],
-    [4, 7, 0, 0, 9, 1, 0, 2, 0],
-    [0, 0, 0, 0, 2, 0, 0, 0, 0]
   ]
 ]
 
@@ -71,7 +60,7 @@ function App() {
                           value={inputValue}
                           disabled={isDisabled}
                           onChange={(e) => {
-                            grid[rowIndex][squareIndex] = e.target.value
+                            grid[rowIndex][squareIndex] = parseInt(e.target.value)
                             setGrid([...grid])
                             checkWinningCondition()
                           }}
@@ -94,24 +83,47 @@ function App() {
 
   function checkWinningCondition() {
     let range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    let rowsFlag = false
-    let housesFlag = false
 
     let rows = grid.map(row => row.toSorted())
-    // let houses = [[], [], [], [], [], [], [], [], []]\
     let houses = [...grid.map(row => [...row])]
     houses = houses.flat()
     
     let tempHouses = [[], [], [], [], [], [], [], [], []]
-    let tempHousesIndexModifier = -1
+    let tempHousesLevelModifier = 0
+    let temphousesSegmentModifier = 0
 
     houses.forEach((number, index) => {
-      if (index % 18 == 0) tempHousesIndexModifier ++
-      tempHouses[tempHousesIndexModifier + Math.floor((index % 9) / 3)].push(number)
+      if (index % 27 == 0 && index != 0) tempHousesLevelModifier += 3
+
+      if (index % 9 < 3) temphousesSegmentModifier = 0
+      else if (index % 9 < 6) temphousesSegmentModifier = 1
+      else temphousesSegmentModifier = 2
+
+
+      tempHouses[tempHousesLevelModifier + temphousesSegmentModifier].push(number)
     })
 
-    console.log(tempHouses)
-    
+    tempHouses.forEach((house, idx) => {
+      house.sort()
+      house.length = 9
+      console.log(`house #${idx} -> ${house}`)
+    })
+
+    let allEntries = [...rows.concat(tempHouses)]
+    let flag = false
+
+    allEntries.forEach(entry => {
+      flag = false
+      if (!flag && entry[0] == 1 && entry[8] == 9) {
+        if (entry.reduce((a,b) => a + b) != 45) flag = true
+      } else {
+        flag = true
+      }
+      console.log(`${entry} : ${flag} : ${entry[0] == 1 && entry[8] == 9} : ${entry.reduce((a,b) => a + b)}`)
+    })
+
+    console.log(!flag)
+    return !flag
   }
 
 
