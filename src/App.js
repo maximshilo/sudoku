@@ -36,15 +36,15 @@ function App() {
           grids[0].map((row, rowIndex) => {
             return (
               <div className='col'>
-                {rowIndex % 3 == 0 ? <div className='horizontal'></div> : <></>}
+                {rowIndex % 3 === 0 ? <div className='horizontal'></div> : <></>}
                 <div className='row'>
                   {row.map((square, squareIndex) => {
                     let inputValue = grid[rowIndex][squareIndex]
                     let isDisabled = false
 
-                    if (inputValue == grids[currentGridIndex][rowIndex][squareIndex] && inputValue != 0) {
+                    if (inputValue === grids[currentGridIndex][rowIndex][squareIndex] && inputValue !== 0) {
                       isDisabled = true
-                    } else if (inputValue == 0) {
+                    } else if (inputValue === 0) {
                       inputValue = ''
                     }
 
@@ -53,7 +53,7 @@ function App() {
                     }
                     return (
                       <div className='row'>
-                        {squareIndex % 3 == 0 ? <div className='vertical'></div> : <></>}
+                        {squareIndex % 3 === 0 ? <div className='vertical'></div> : <></>}
 
                         <input
                           style={inputStyle}
@@ -67,12 +67,12 @@ function App() {
                         >
                         </input>
 
-                        {squareIndex + 1 == row.length ? <div className='vertical'></div> : <></>}
+                        {squareIndex + 1 === row.length ? <div className='vertical'></div> : <></>}
                       </div>
                     )
                   })}
                 </div>
-                {rowIndex + 1 == grids[0].length ? <div className='horizontal'></div> : <></>}
+                {rowIndex + 1 === grids[0].length ? <div className='horizontal'></div> : <></>}
               </div>
             )
           })
@@ -107,7 +107,7 @@ function App() {
     //  --- --- ---
 
     houses.forEach((number, index) => {
-      if (index % 27 == 0 && index != 0) tempHousesLevelModifier += 3
+      if (index % 27 === 0 && index !== 0) tempHousesLevelModifier += 3
 
       if (index % 9 < 3) temphousesSegmentModifier = 0
       else if (index % 9 < 6) temphousesSegmentModifier = 1
@@ -127,8 +127,8 @@ function App() {
 
     allEntries.forEach(entry => {
       flag = false
-      if (!flag && entry[0] == 1 && entry[8] == 9) {
-        if (entry.reduce((a, b) => a + b) != 45) flag = true
+      if (!flag && entry[0] === 1 && entry[8] === 9) {
+        if (entry.reduce((a, b) => a + b) !== 45) flag = true
       } else {
         flag = true
       }
