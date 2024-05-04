@@ -13,6 +13,50 @@ const grids = [
     [9, 0, 6, 3, 0, 5, 0, 0, 0],
     [4, 7, 0, 0, 9, 1, 0, 2, 0],
     [0, 0, 0, 0, 2, 0, 0, 0, 0]
+  ],
+  [
+    [6, 0, 0, 0, 3, 1, 4, 0, 0],
+    [0, 3, 0, 8, 0, 5, 0, 0, 2],
+    [0, 0, 9, 0, 0, 0, 0, 0, 8],
+    [5, 6, 0, 0, 2, 4, 0, 0, 0],
+    [0, 4, 0, 0, 0, 0, 0, 8, 7],
+    [1, 0, 7, 3, 8, 6, 2, 0, 0],
+    [4, 0, 0, 6, 5, 0, 8, 9, 0],
+    [9, 2, 0, 1, 7, 0, 3, 0, 5],
+    [8, 5, 1, 0, 4, 0, 0, 0, 0]
+  ],
+  [
+    [4, 0, 3, 0, 0, 0, 1, 0, 5],
+    [0, 6, 0, 9, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 4, 6],
+    [9, 3, 2, 0, 8, 1, 0, 7, 4],
+    [0, 0, 0, 0, 9, 7, 3, 0, 0],
+    [0, 1, 4, 0, 2, 6, 9, 5, 8],
+    [0, 4, 7, 8, 3, 0, 0, 0, 0],
+    [0, 0, 0, 0, 4, 0, 5, 0, 0],
+    [6, 0, 9, 1, 0, 0, 0, 8, 0],
+  ],
+  [
+    [0, 6, 0, 4, 0, 1, 3, 7, 0],
+    [1, 0, 0, 0, 0, 0, 4, 2, 0],
+    [3, 0, 0, 0, 0, 2, 0, 6, 1],
+    [4, 9, 6, 0, 0, 0, 0, 3, 2],
+    [0, 0, 8, 3, 6, 9, 0, 0, 0],
+    [0, 5, 3, 0, 0, 8, 1, 9, 6],
+    [6, 4, 0, 8, 1, 3, 2, 0, 0],
+    [0, 0, 0, 6, 0, 7, 0, 0, 0],
+    [0, 0, 0, 5, 9, 0, 0, 0, 3],
+  ],
+  [
+    [9, 0, 1, 0, 5, 3, 0, 0, 0],
+    [4, 6, 0, 0, 0, 7, 3, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 8, 0],
+    [0, 0, 0, 0, 7, 0, 1, 0, 6],
+    [0, 0, 6, 0, 0, 4, 0, 0, 0],
+    [5, 1, 0, 0, 0, 0, 0, 7, 8],
+    [2, 4, 5, 7, 3, 0, 9, 0, 1],
+    [0, 0, 0, 9, 4, 0, 0, 5, 0],
+    [1, 0, 7, 6, 2, 0, 8, 4, 3],
   ]
 ]
 
@@ -20,14 +64,20 @@ function App() {
   const [currentGridIndex, setCurrentGridIndex] = useState(0)
   const [grid, setGrid] = useState(grids[currentGridIndex])
 
-  useEffect(() => { loadGrid() }, [])
-
+  
   function loadGrid() {
     let numOfGrids = grids.length
     let nextGridIdx = parseInt(Math.random() * numOfGrids)
+    
+    while (nextGridIdx === currentGridIndex) {
+      nextGridIdx = parseInt(Math.random() * numOfGrids)
+    }
+    
     setCurrentGridIndex(nextGridIdx)
     setGrid([...grids[nextGridIdx].map(row => [...row])])
   }
+  
+  useEffect(() => { loadGrid() }, [])
 
   function displayGrid() {
     return (
@@ -138,7 +188,6 @@ function App() {
     let flag = false
 
     allEntries.forEach(entry => {
-      flag = false
       if (!flag && entry[0] === 1 && entry[8] === 9) {
         if (entry.reduce((a, b) => a + b) !== 45) flag = true
       } else {
