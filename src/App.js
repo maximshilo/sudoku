@@ -64,8 +64,7 @@ function App() {
                             let key = e.key
                             let value = e.target.value
                             let allowedKeys = '1 2 3 4 5 6 7 8 9'
-                            console.log(!allowedKeys.indexOf(key) === -1, 'allowedKyes')
-                            if (key != 'Backspace' && (value.length > 0 || allowedKeys.indexOf(key) === -1)) e.preventDefault()
+                            if (key !== 'Backspace' && (value.length > 0 || allowedKeys.indexOf(key) === -1)) e.preventDefault()
                             else return true
                           }}
                           onChange={(e) => {
