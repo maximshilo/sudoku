@@ -56,11 +56,24 @@ function App() {
                         {squareIndex % 3 === 0 ? <div className='vertical'></div> : <></>}
 
                         <input
+                          type='number'
                           style={inputStyle}
                           value={inputValue}
                           disabled={isDisabled}
+                          onKeyDown={(e) => {
+                            let key = e.key
+                            let value = e.target.value
+                            let allowedKeys = '1 2 3 4 5 6 7 8 9'
+                            console.log(!allowedKeys.indexOf(key) === -1, 'allowedKyes')
+                            if (value.length > 0 || allowedKeys.indexOf(key) === -1) e.preventDefault()
+                            else return true
+                          }}
                           onChange={(e) => {
-                            grid[rowIndex][squareIndex] = parseInt(e.target.value)
+                            let value = e.target.value
+
+                            if (isNaN(value)) grid[rowIndex][squareIndex] = 0
+                            else grid[rowIndex][squareIndex] = parseInt(e.target.value)
+
                             setGrid([...grid])
                             if (checkWinningCondition()) win()
                           }}
@@ -145,8 +158,11 @@ function App() {
   return (
     <div className="App">
       <div className='gameContainer'>
-        { displayGrid() }
-        <button className='newGameButton' onClick={() => { loadGrid() }}>NEW GAME</button>
+        <div className='titleRow'>
+          <h1>SUDOKU</h1>
+          <button className='newGameButton' onClick={() => { loadGrid() }}>NEW GAME</button>
+        </div>
+        {displayGrid()}
       </div>
     </div>
   );
