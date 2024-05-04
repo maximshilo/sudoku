@@ -64,20 +64,23 @@ function App() {
   const [currentGridIndex, setCurrentGridIndex] = useState(0)
   const [grid, setGrid] = useState(grids[currentGridIndex])
 
-  
+
   function loadGrid() {
     let numOfGrids = grids.length
     let nextGridIdx = parseInt(Math.random() * numOfGrids)
-    
+
     while (nextGridIdx === currentGridIndex) {
       nextGridIdx = parseInt(Math.random() * numOfGrids)
     }
-    
+
     setCurrentGridIndex(nextGridIdx)
     setGrid([...grids[nextGridIdx].map(row => [...row])])
   }
-  
-  useEffect(() => { loadGrid() }, [])
+
+  useEffect(() => {
+    loadGrid()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function displayGrid() {
     return (
